@@ -1,0 +1,18 @@
+main: DiamondStrider1\BetterMinigames\BMG
+version: 0.0.1
+api: 3.21.1
+
+name: BetterMinigames
+author: DiamondStrider1
+description: A plugin for Pocketmine which adds support for various minigames.
+website: https://github.com/Swift-Strider/BetterMinigames
+
+commands:
+    test:
+        description: Testing Commands
+        usage: /test
+        permission: better-minigames.command.test
+permissions:
+    better-minigames.command.test:
+        description: allows use of test command
+        default: op
