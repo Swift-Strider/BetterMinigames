@@ -9,8 +9,8 @@ website: https://github.com/Swift-Strider/BetterMinigames
 
 commands:
     bmg:
-        description: Testing Commands
-        usage: /bmg
+        description: Admin command for managing minigames
+        usage: /bmg ...
         permission: better-minigames.manage
 permissions:
     better-minigames.manage:
