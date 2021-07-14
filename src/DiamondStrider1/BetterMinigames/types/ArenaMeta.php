@@ -20,28 +20,13 @@
 
 declare(strict_types=1);
 
-namespace DiamondStrider1\BetterMinigames;
+namespace DiamondStrider1\BetterMinigames\types;
 
-use DiamondStrider1\BetterMinigames\commands\admin\AdminCommand;
-use DiamondStrider1\BetterMinigames\commands\BMGCommand;
-use pocketmine\command\CommandExecutor;
-use pocketmine\command\PluginCommand;
-
-class CommandRegister
+interface ArenaMeta
 {
-    public static function registerCommands(BMG $plugin)
-    {
-        self::registerCommandExecutor("bmg", new AdminCommand($plugin), $plugin);
-    }
-
-    private static function registerCommandExecutor(string $command, CommandExecutor $executor, BMG $plugin)
-    {
-        $cmd = $plugin->getServer()->getCommandMap()->getCommand($command);
-
-        if (!$cmd) return;
-        if (!($cmd instanceof PluginCommand)) return;
-        if ($cmd->getPlugin() !== $plugin) return;
-
-        $cmd->setExecutor($executor);
-    }
+    /** @return string[] */
+    public static function getCategories(): array;
+    public function loadFromArray(array $data): void;
+    public function saveToArray(): array;
+    public function validate(): bool;
 }

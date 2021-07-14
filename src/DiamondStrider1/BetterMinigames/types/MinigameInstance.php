@@ -20,28 +20,21 @@
 
 declare(strict_types=1);
 
-namespace DiamondStrider1\BetterMinigames;
+namespace DiamondStrider1\BetterMinigames\types;
 
-use DiamondStrider1\BetterMinigames\commands\admin\AdminCommand;
-use DiamondStrider1\BetterMinigames\commands\BMGCommand;
-use pocketmine\command\CommandExecutor;
-use pocketmine\command\PluginCommand;
+use pocketmine\Player;
 
-class CommandRegister
+interface MinigameInstance
 {
-    public static function registerCommands(BMG $plugin)
-    {
-        self::registerCommandExecutor("bmg", new AdminCommand($plugin), $plugin);
-    }
+    const STARTING = 0;
+    const PLAYING = 1;
+    const ENDING = 2;
 
-    private static function registerCommandExecutor(string $command, CommandExecutor $executor, BMG $plugin)
-    {
-        $cmd = $plugin->getServer()->getCommandMap()->getCommand($command);
+    public function sendPlayer(Player $player): bool;
+    public function removePlayer(Player $player): bool;
+    public function sendSpectator(Player $player): bool;
+    public function removeSpectator(Player $player): bool;
 
-        if (!$cmd) return;
-        if (!($cmd instanceof PluginCommand)) return;
-        if ($cmd->getPlugin() !== $plugin) return;
-
-        $cmd->setExecutor($executor);
-    }
+    /** @return int One of (STARTING, PLAYING, ENDING) */
+    public function getRunningState(): int;
 }

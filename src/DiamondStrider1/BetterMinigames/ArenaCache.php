@@ -22,35 +22,45 @@ declare(strict_types=1);
 
 namespace DiamondStrider1\BetterMinigames;
 
-use DiamondStrider1\BetterMinigames\minigames\skywars\SkyWars;
-use DiamondStrider1\BetterMinigames\types\Minigame;
+use DiamondStrider1\BetterMinigames\types\Arena;
 
-class MinigameRegister
+class ArenaCache
 {
-    /** @var Minigame[] $minigames */
-    private static $minigames = [];
+    /** @var Arena[] $arenas */
+    private $arenas = [];
 
-    public static function registerDefaultMinigames()
+    public function loadFromArray(array $entries): void
     {
-    }
-
-    public static function registerMinigame(string $uniqueName, Minigame $minigame): void
-    {
-        self::$minigames[$uniqueName] = $minigame;
-    }
-
-    /** @return Minigame[] */
-    public static function getAllMinigames(): array
-    {
-        return self::$minigames;
-    }
-
-    /** @return Minigame */
-    public static function getMinigame(string $name): ?Minigame
-    {
-        if (!isset(self::$minigames[$name])) {
-            return null;
+        $this->arenas = [];
+        foreach ($entries as $name => $arenaData) {
+            $arena = new Arena;
+            $arena->loadFromArray($arenaData);
+            $this->arenas[$name] = $arena;
         }
-        return self::$minigames[$name];
+    }
+
+    public function saveToArray(): array
+    {
+        $data = [];
+        foreach ($this->arenas as $name => $entry) {
+            $data[$name] = $entry->saveToArray();
+        }
+        return $data;
+    }
+
+    public function addArena(string $name, Arena $entry): void
+    {
+        $this->arenas[$name] = $entry;
+    }
+
+    public function getArena(string $name): ?Arena
+    {
+        return isset($this->arenas[$name]) ? $this->arenas[$name] : null;
+    }
+
+    /** @return Arena[] */
+    public function getAllArenas(): array
+    {
+        return $this->arenas;
     }
 }

@@ -8,11 +8,11 @@ description: A plugin for Pocketmine which adds support for various minigames.
 website: https://github.com/Swift-Strider/BetterMinigames
 
 commands:
-    test:
+    bmg:
         description: Testing Commands
-        usage: /test
-        permission: better-minigames.command.test
+        usage: /bmg
+        permission: better-minigames.manage
 permissions:
-    better-minigames.command.test:
-        description: allows use of test command
+    better-minigames.manage:
+        description: Allows adding, removing, and customizing minigames on the server.
         default: op

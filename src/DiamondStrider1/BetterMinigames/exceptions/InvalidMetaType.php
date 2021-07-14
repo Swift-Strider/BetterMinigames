@@ -20,28 +20,14 @@
 
 declare(strict_types=1);
 
-namespace DiamondStrider1\BetterMinigames;
+namespace DiamondStrider1\BetterMinigames\exceptions;
 
-use DiamondStrider1\BetterMinigames\commands\admin\AdminCommand;
-use DiamondStrider1\BetterMinigames\commands\BMGCommand;
-use pocketmine\command\CommandExecutor;
-use pocketmine\command\PluginCommand;
+use Exception;
 
-class CommandRegister
+class InvalidMetaType extends Exception
 {
-    public static function registerCommands(BMG $plugin)
+    public function __construct(string $metaType)
     {
-        self::registerCommandExecutor("bmg", new AdminCommand($plugin), $plugin);
-    }
-
-    private static function registerCommandExecutor(string $command, CommandExecutor $executor, BMG $plugin)
-    {
-        $cmd = $plugin->getServer()->getCommandMap()->getCommand($command);
-
-        if (!$cmd) return;
-        if (!($cmd instanceof PluginCommand)) return;
-        if ($cmd->getPlugin() !== $plugin) return;
-
-        $cmd->setExecutor($executor);
+        parent::__construct("Invalid Meta Name: $metaType");
     }
 }

@@ -23,11 +23,43 @@ declare(strict_types=1);
 namespace DiamondStrider1\BetterMinigames;
 
 use pocketmine\plugin\PluginBase;
+use pocketmine\utils\Config;
 
 class BMG extends PluginBase
 {
+    /** @var BMG $instance */
+    private static $instance;
+    public static function getInstance(): ?BMG
+    {
+        return self::$instance;
+    }
+
+    /** @var ArenaCache $arenaCache */
+    private $arenaCache;
+    /** @var Config $arenaConfig */
+    private $arenaConfig;
+
     public function onEnable()
     {
+        self::$instance = $this;
+
         CommandRegister::registerCommands($this);
+        MinigameRegister::registerDefaultMinigames();
+
+        $this->arenaConfig = new Config($this->getDataFolder() . "arenas.yml");
+        $this->arenaCache = new ArenaCache;
+        $this->arenaCache->loadFromArray($this->arenaConfig->getAll());
+    }
+
+    public function onDisable()
+    {
+        $cacheData = $this->arenaCache->saveToArray();
+        $this->arenaConfig->setAll($cacheData);
+        $this->arenaConfig->save();
+    }
+
+    public function getArenaCache(): ?ArenaCache
+    {
+        return $this->arenaCache;
     }
 }
