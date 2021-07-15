@@ -26,6 +26,8 @@ interface IDataProvider
 {
     public function getAll(): array;
     public function setAll(array $data): void;
+    public function wasCorrupted(bool $resetCorrupted = true): bool;
+    public function getLastError(): string;
     public function save(string $comment): void;
     public function reload(): void;
 }

@@ -38,7 +38,10 @@ class ReloadCaches implements Subcommand
         $start = microtime(true);
 
         Utils::sendMessage($sender, "Reloading Arena Caches from Config");
-        $this->handleArenaCacheResult($sender, BMG::getInstance()->getArenaCache()->load(true));
+        $this->handleCacheResult($sender, BMG::getInstance()->getArenaCache()->load(true), "arenas.yml");
+
+        Utils::sendMessage($sender, "Reloading Game Caches from Config");
+        $this->handleCacheResult($sender, BMG::getInstance()->getGameCache()->load(true), "games.yml");
 
         $diff = microtime(true) - $start;
         Utils::sendMessage($sender, sprintf("Reloaded BetterMinigames Plugin in %.2f seconds", $diff));
@@ -53,23 +56,20 @@ class ReloadCaches implements Subcommand
         ];
     }
 
-    private function handleArenaCacheResult(CommandSender $sender, DeserializationResult $result)
+    private function handleCacheResult(CommandSender $sender, DeserializationResult $result, string $fileName)
     {
-        $plugin = BMG::getInstance();
-
         if ($result->hasErrors()) {
             Utils::sendMessage(
                 $sender,
-                TF::RED . "The file arenas.yml has ERRORS; Check the console for more info."
+                TF::RED . "The file $fileName has ERRORS; Check the console for more info."
             );
         }
         if ($result->hasWarnings()) {
             Utils::sendMessage(
                 $sender,
-                TF::RED . "The file arenas.yml has WARNINGS; Check the console for more info."
+                TF::RED . "The file $fileName has WARNINGS; Check the console for more info."
             );
         }
-
-        $plugin->handleArenaCacheResult($result);
+        BMG::getInstance()->handleCacheResult($result, $fileName);
     }
 }

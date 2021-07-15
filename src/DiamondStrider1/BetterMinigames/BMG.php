@@ -28,15 +28,10 @@ use pocketmine\plugin\PluginBase;
 
 class BMG extends PluginBase
 {
-    /** @var BMG $instance */
-    private static $instance;
-    public static function getInstance(): ?BMG
-    {
-        return self::$instance;
-    }
-
     /** @var ArenaCache $arenaCache */
     private $arenaCache;
+    /** @var GameCache $gameCache */
+    private $gameCache;
 
     public function onEnable()
     {
@@ -47,12 +42,15 @@ class BMG extends PluginBase
         MinigameRegister::registerDefaultMinigames();
 
         $this->arenaCache = new ArenaCache(new YamlDataProvider($dFolder . "arenas.yml"));
-        $this->handleArenaCacheResult($this->arenaCache->load());
+        $this->handleCacheResult($this->arenaCache->load(), "arenas.yml");
+        $this->gameCache = new GameCache(new YamlDataProvider($dFolder . "games.yml"));
+        $this->handleCacheResult($this->gameCache->load(), "games.yml");
     }
 
     public function onDisable()
     {
         $this->arenaCache->save();
+        $this->gameCache->save();
     }
 
     public function getArenaCache(): ?ArenaCache
@@ -60,17 +58,30 @@ class BMG extends PluginBase
         return $this->arenaCache;
     }
 
-    public function handleArenaCacheResult(DeserializationResult $result)
+    public function getGameCache(): ?GameCache
+    {
+        return $this->gameCache;
+    }
+
+    public function handleCacheResult(DeserializationResult $result, string $fileName)
     {
         if ($result->hasErrors()) {
-            $this->getLogger()->emergency("Your arenas.yml file has ERRORS");
+            $this->getLogger()->emergency("Your $fileName file has ERRORS");
             foreach ($result->getErrors() as $e)
                 $this->getLogger()->emergency($e);
         }
         if ($result->hasWarnings()) {
-            $this->getLogger()->emergency("Your arenas.yml file has WARNINGS");
+            $this->getLogger()->emergency("Your $fileName file has WARNINGS");
             foreach ($result->getWarnings() as $e)
                 $this->getLogger()->emergency($e);
         }
+    }
+
+    /** @var BMG $instance */
+    private static $instance;
+
+    public static function getInstance(): ?BMG
+    {
+        return self::$instance;
     }
 }

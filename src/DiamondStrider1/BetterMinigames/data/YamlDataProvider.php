@@ -32,20 +32,18 @@ class YamlDataProvider implements IDataProvider
     private $config;
     /** @var string $file */
     private $file;
+    /** @var bool $corrupted */
+    private $corrupted = false;
+    /** @var string $lastErrorMessage */
+    private $lastErrorMessage = "";
+
     public function __construct(string $file)
     {
         $this->file = $file;
         try {
             $this->config = new Config($file, Config::YAML);
         } catch (ErrorException $e) {
-            $msg = $e->getMessage();
-            file_put_contents($file . ".broken", "#(Line Numbers are off by 2) $msg\n" . file_get_contents($file));
-            file_put_contents($file, "");
-            $pretty_name = substr(
-                $file,
-                ($pos = strpos($file, BMG::getInstance()->getDataFolder())) === false ? 0 : $pos
-            );
-            BMG::getInstance()->getLogger()->emergency("The file $pretty_name was corrupted and moved to $pretty_name.borken in case you want to fix it.");
+            $this->handleConfigError($e);
             $this->config = new Config($file, Config::YAML);
         }
     }
@@ -73,15 +71,39 @@ class YamlDataProvider implements IDataProvider
         try {
             $this->config->load($this->file, Config::YAML);
         } catch (ErrorException $e) {
-            $msg = $e->getMessage();
-            file_put_contents(str_replace(".yml", ".broken.yml", $this->file), "#(Line Numbers of Errors may be off) $msg\n" . file_get_contents($this->file));
-            file_put_contents($this->file, "");
-            $pretty_name = substr(
-                $this->file,
-                ($pos = strpos($this->file, BMG::getInstance()->getDataFolder())) === false ? 0 : $pos
-            );
-            BMG::getInstance()->getLogger()->emergency("The file $pretty_name was corrupted and moved to $pretty_name.borken in case you want to fix it.");
+            $this->handleConfigError($e);
             $this->config->load($this->file, Config::YAML);
         }
+    }
+
+    public function wasCorrupted(bool $resetCorrupted = true): bool
+    {
+        $corrupted = $this->corrupted;
+        if ($resetCorrupted)
+            $this->corrupted = false;
+        return $corrupted;
+    }
+
+    public function getLastError(): string
+    {
+        return $this->lastErrorMessage;
+    }
+
+    private function handleConfigError(ErrorException $e)
+    {
+        $msg = $e->getMessage();
+        $dFolder = BMG::getInstance()->getDataFolder();
+        $newFile = str_replace(".yml", ".broken.yml", $this->file);
+        $fileName = str_replace($dFolder, "", $this->file);
+        $newFileName = str_replace($dFolder, "", $newFile);
+
+        $this->corrupted = true;
+
+        file_put_contents(
+            $newFile,
+            "### (Line Numbers may be off by at most 2 lines) $msg\n" . file_get_contents($this->file)
+        );
+        file_put_contents($this->file, "");
+        $this->lastErrorMessage = "Temporarily moved $fileName to $newFileName for fixing. (This file may be overwritten the next time the file corrupts)";
     }
 }

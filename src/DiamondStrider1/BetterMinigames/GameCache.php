@@ -61,8 +61,19 @@ class GameCache
         if ($reloadConfig) {
             $this->config->reload();
         }
-        $data = $this->config->getAll();
-        return $this->loadFromArray($data);
+
+        $ret = new DeserializationResult;
+        if ($this->config->wasCorrupted()) {
+            $ret->addError("Corrupted Configuration: " . $this->config->getLastError());
+        }
+
+        $result = $this->loadFromArray($this->config->getAll());
+        foreach ($result->getErrors() as $e)
+            $ret->addError($e);
+        foreach ($result->getWarnings() as $w)
+            $ret->addWarning($w);
+
+        return $ret;
     }
 
     public function save(): void
