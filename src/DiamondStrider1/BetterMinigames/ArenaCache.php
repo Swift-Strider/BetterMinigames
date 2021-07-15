@@ -40,9 +40,9 @@ class ArenaCache
         $this->config = $config;
     }
 
-    public function addArena(string $name, Arena $entry): void
+    public function createArena(string $id): Arena
     {
-        $this->arenas[$name] = $entry;
+        return $this->arenas[$id] = new Arena($id);
     }
 
     public function getArena(string $name): ?Arena
@@ -76,20 +76,20 @@ class ArenaCache
     {
         $ret = new DeserializationResult;
         $this->arenas = [];
-        foreach ($entries as $name => $arenaData) {
-            $arena = new Arena;
+        foreach ($entries as $id => $arenaData) {
+            $arena = new Arena($id);
             $result = $arena->loadFromArray($arenaData);
             $ret->addResult(
                 $result,
-                sprintf("%s (%d errors): %s", $name, count($result->getErrors()), TF::YELLOW),
-                sprintf("%s (%d warnings): %s", $name, count($result->getWarnings()), TF::YELLOW),
+                sprintf("%s (%d errors): %s", $id, count($result->getErrors()), TF::YELLOW),
+                sprintf("%s (%d warnings): %s", $id, count($result->getWarnings()), TF::YELLOW),
                 TF::RESET . ", " . TF::YELLOW
             );
             if ($result->hasErrors()) {
                 // TODO: store invalid entries in array form, so admins can fix errors after shutting down the server
                 continue;
             }
-            $this->arenas[$name] = $arena;
+            $this->arenas[$id] = $arena;
         }
         return $ret;
     }
@@ -97,8 +97,8 @@ class ArenaCache
     private function saveToArray(): array
     {
         $data = [];
-        foreach ($this->arenas as $name => $entry) {
-            $data[$name] = $entry->saveToArray();
+        foreach ($this->arenas as $id => $entry) {
+            $data[$id] = $entry->saveToArray();
         }
         return $data;
     }

@@ -23,9 +23,13 @@ declare(strict_types=1);
 namespace DiamondStrider1\BetterMinigames\types;
 
 use DiamondStrider1\BetterMinigames\utils\Utils;
+use ErrorException;
+use OutOfBoundsException;
 
 class Arena
 {
+    /** @var string $id */
+    private $id;
     /** @var string $levelname */
     private $levelname;
     /** @var string $registeredType */
@@ -33,11 +37,14 @@ class Arena
     /** @var ArenaMeta $meta */
     private $meta;
 
-    public function __construct(string $levelname = "", string $registeredType = "", ArenaMeta $meta = null)
+    public function __construct(string $id)
     {
-        $this->levelname = $levelname;
-        $this->registeredType = $registeredType;
-        $this->meta = $meta;
+        $this->id = $id;
+    }
+
+    public function getID(): string
+    {
+        return $this->id;
     }
 
     public function getType(): string
@@ -48,9 +55,16 @@ class Arena
     public function loadFromArray(array $data): DeserializationResult
     {
         $ret = new DeserializationResult;
-        $this->levelname = $data["levelname"];
-        $this->registeredType = $data["registered_type"];
-        $this->meta = Utils::constructArenaMeta($this->registeredType, $data["meta"], $ret);
+
+        try {
+            $this->levelname = $data["levelname"];
+            $this->registeredType = $data["registered_type"];
+            if ($this->registeredType !== "none")
+                $this->meta = Utils::constructArenaMeta($this->registeredType, $data["meta"], $ret);
+        } catch (ErrorException $e) {
+            $ret->addError("Error Loading Arena: " . $e->getMessage());
+        }
+
         return $ret;
     }
 
