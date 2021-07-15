@@ -24,6 +24,8 @@ namespace DiamondStrider1\BetterMinigames\utils;
 
 use DiamondStrider1\BetterMinigames\MinigameRegister;
 use DiamondStrider1\BetterMinigames\types\ArenaMeta;
+use DiamondStrider1\BetterMinigames\types\DeserializationResult;
+use ErrorException;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat as TF;
 use ReflectionClass;
@@ -54,12 +56,24 @@ class Utils
         return $metaProperties;
     }
 
-    public static function constructArenaMeta(string $type, array $data): ?ArenaMeta
+    public static function constructArenaMeta(string $type, array $data, DeserializationResult &$result = null): ?ArenaMeta
     {
         $mg = MinigameRegister::getMinigame($type);
-        if (!$mg) return null;
+
+        if (!$mg) {
+            if ($result) {
+                $result->addError("Unregistered Minigame Type");
+            }
+            return null;
+        };
+
         $meta = $mg->getArenaMeta();
-        $meta->loadFromArray($data);
+        try {
+            $meta->loadFromArray($data);
+        } catch (ErrorException $e) {
+            $result->addError("Error Loading Meta: " . $e->getMessage());
+        }
+
         return $meta;
     }
 

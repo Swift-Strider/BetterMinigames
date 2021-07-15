@@ -20,38 +20,43 @@
 
 declare(strict_types=1);
 
-namespace DiamondStrider1\BetterMinigames;
+namespace DiamondStrider1\BetterMinigames\minigames\skywars;
 
-use DiamondStrider1\BetterMinigames\minigames\skywars\SkyWars;
-use DiamondStrider1\BetterMinigames\types\Minigame;
+use DiamondStrider1\BetterMinigames\types\ArenaMeta;
+use pocketmine\math\Vector3;
 
-class MinigameRegister
+class SkyWarsArenaMeta implements ArenaMeta
 {
-    /** @var Minigame[] $minigames */
-    private static $minigames = [];
-
-    public static function registerDefaultMinigames()
+    private static $categories = [];
+    public static function getCategories(): array
     {
-        self::registerMinigame("SkyWars", new SkyWars);
+        return self::$categories;
     }
 
-    public static function registerMinigame(string $uniqueName, Minigame $minigame): void
+    /**
+     * @Category Positions
+     * @var Vector3
+     */
+    public $SPAWN_POS;
+
+    public function loadFromArray(array $data): void
     {
-        self::$minigames[$uniqueName] = $minigame;
+        $spawn_pos = $data["SPAWN_POS"];
+        $this->SPAWN_POS = new Vector3($spawn_pos[0], $spawn_pos[1], $spawn_pos[2]);
     }
 
-    /** @return Minigame[] */
-    public static function getAllMinigames(): array
+    public function saveToArray(): array
     {
-        return self::$minigames;
+        $data = [];
+
+        $spawn_pos = $this->SPAWN_POS;
+        $data["SPAWN_POS"] = [$spawn_pos->x, $spawn_pos->y, $spawn_pos->z];
+
+        return $data;
     }
 
-    /** @return Minigame */
-    public static function getMinigame(string $name): ?Minigame
+    public function validate(): bool
     {
-        if (!isset(self::$minigames[$name])) {
-            return null;
-        }
-        return self::$minigames[$name];
+        return false;
     }
 }

@@ -20,38 +20,47 @@
 
 declare(strict_types=1);
 
-namespace DiamondStrider1\BetterMinigames;
+namespace DiamondStrider1\BetterMinigames\minigames\skywars;
 
-use DiamondStrider1\BetterMinigames\minigames\skywars\SkyWars;
-use DiamondStrider1\BetterMinigames\types\Minigame;
+use DiamondStrider1\BetterMinigames\types\Arena;
+use DiamondStrider1\BetterMinigames\types\MinigameInstance;
+use pocketmine\Player;
 
-class MinigameRegister
+class SkyWarsMinigameInstance implements MinigameInstance
 {
-    /** @var Minigame[] $minigames */
-    private static $minigames = [];
+    /** @var Arena $arena */
+    private $arena;
+    private $state = 0;
+    private $players = [];
+    private $spectators = [];
 
-    public static function registerDefaultMinigames()
+    public function __construct(Arena $arena)
     {
-        self::registerMinigame("SkyWars", new SkyWars);
+        $this->arena = $arena;
     }
 
-    public static function registerMinigame(string $uniqueName, Minigame $minigame): void
+    public function sendPlayer(Player $player): bool
     {
-        self::$minigames[$uniqueName] = $minigame;
+        return false;
     }
 
-    /** @return Minigame[] */
-    public static function getAllMinigames(): array
+    public function removePlayer(Player $player): bool
     {
-        return self::$minigames;
+        return false;
     }
 
-    /** @return Minigame */
-    public static function getMinigame(string $name): ?Minigame
+    public function sendSpectator(Player $player): bool
     {
-        if (!isset(self::$minigames[$name])) {
-            return null;
-        }
-        return self::$minigames[$name];
+        return false;
+    }
+
+    public function removeSpectator(Player $player): bool
+    {
+        return false;
+    }
+
+    public function getRunningState(): int
+    {
+        return $this->state;
     }
 }

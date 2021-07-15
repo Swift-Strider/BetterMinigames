@@ -23,6 +23,7 @@ declare(strict_types=1);
 namespace DiamondStrider1\BetterMinigames\types;
 
 use DiamondStrider1\BetterMinigames\exceptions\InvalidMetaType;
+use DiamondStrider1\BetterMinigames\exceptions\UnregisteredMetaException;
 use DiamondStrider1\BetterMinigames\utils\Utils;
 
 class Arena
@@ -46,14 +47,13 @@ class Arena
         return $this->registeredType;
     }
 
-    public function loadFromArray(array $data)
+    public function loadFromArray(array $data): DeserializationResult
     {
+        $ret = new DeserializationResult;
         $this->levelname = $data["levelname"];
         $this->registeredType = $data["registered_type"];
-        $this->meta = Utils::constructArenaMeta($this->registeredType, $data["meta"]);
-        if (!$this->meta) {
-            throw new InvalidMetaType($this->registeredType);
-        }
+        $this->meta = Utils::constructArenaMeta($this->registeredType, $data["meta"], $ret);
+        return $ret;
     }
 
     public function saveToArray()

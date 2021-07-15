@@ -27,7 +27,6 @@ use DiamondStrider1\BetterMinigames\utils\Utils;
 use pocketmine\command\Command;
 use pocketmine\command\CommandExecutor;
 use pocketmine\command\CommandSender;
-use pocketmine\utils\TextFormat as TF;
 
 class AdminCommand implements CommandExecutor
 {
@@ -38,6 +37,7 @@ class AdminCommand implements CommandExecutor
     {
         $this->subs = [
             "arena" => new ManageArena,
+            "reload" => new ReloadCaches,
         ];
     }
 

@@ -22,30 +22,22 @@ declare(strict_types=1);
 
 namespace DiamondStrider1\BetterMinigames;
 
+use DiamondStrider1\BetterMinigames\data\IDataProvider;
 use DiamondStrider1\BetterMinigames\types\Arena;
+use DiamondStrider1\BetterMinigames\types\DeserializationResult;
+use pocketmine\utils\TextFormat as TF;
 
 class ArenaCache
 {
     /** @var Arena[] $arenas */
     private $arenas = [];
 
-    public function loadFromArray(array $entries): void
-    {
-        $this->arenas = [];
-        foreach ($entries as $name => $arenaData) {
-            $arena = new Arena;
-            $arena->loadFromArray($arenaData);
-            $this->arenas[$name] = $arena;
-        }
-    }
+    /** @var IDataProvider $config */
+    private $config;
 
-    public function saveToArray(): array
+    public function __construct(IDataProvider $config)
     {
-        $data = [];
-        foreach ($this->arenas as $name => $entry) {
-            $data[$name] = $entry->saveToArray();
-        }
-        return $data;
+        $this->config = $config;
     }
 
     public function addArena(string $name, Arena $entry): void
@@ -62,5 +54,52 @@ class ArenaCache
     public function getAllArenas(): array
     {
         return $this->arenas;
+    }
+
+    public function load(bool $reloadConfig = false): DeserializationResult
+    {
+        if ($reloadConfig) {
+            $this->config->reload();
+        }
+        $data = $this->config->getAll();
+        return $this->loadFromArray($data);
+    }
+
+    public function save(): void
+    {
+        $entries = $this->saveToArray();
+        $this->config->setAll($entries);
+        $this->config->save("Data for all arenas is stored here");
+    }
+
+    private function loadFromArray(array $entries): DeserializationResult
+    {
+        $ret = new DeserializationResult;
+        $this->arenas = [];
+        foreach ($entries as $name => $arenaData) {
+            $arena = new Arena;
+            $result = $arena->loadFromArray($arenaData);
+            $ret->addResult(
+                $result,
+                sprintf("%s (%d errors): %s", $name, count($result->getErrors()), TF::YELLOW),
+                sprintf("%s (%d warnings): %s", $name, count($result->getWarnings()), TF::YELLOW),
+                TF::RESET . ", " . TF::YELLOW
+            );
+            if ($result->hasErrors()) {
+                // TODO: store invalid entries in array form, so admins can fix errors after shutting down the server
+                continue;
+            }
+            $this->arenas[$name] = $arena;
+        }
+        return $ret;
+    }
+
+    private function saveToArray(): array
+    {
+        $data = [];
+        foreach ($this->arenas as $name => $entry) {
+            $data[$name] = $entry->saveToArray();
+        }
+        return $data;
     }
 }

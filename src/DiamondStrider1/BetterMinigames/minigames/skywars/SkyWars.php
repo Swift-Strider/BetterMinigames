@@ -20,14 +20,22 @@
 
 declare(strict_types=1);
 
-namespace DiamondStrider1\BetterMinigames\exceptions;
+namespace DiamondStrider1\BetterMinigames\minigames\skywars;
 
-use Exception;
+use DiamondStrider1\BetterMinigames\types\Arena;
+use DiamondStrider1\BetterMinigames\types\ArenaMeta;
+use DiamondStrider1\BetterMinigames\types\Minigame;
+use DiamondStrider1\BetterMinigames\types\MinigameMeta;
 
-class InvalidMetaType extends Exception
+class SkyWars implements Minigame
 {
-    public function __construct(string $metaType)
+    public function getArenaMeta(): SkyWarsArenaMeta
     {
-        parent::__construct("Invalid Meta Name: $metaType");
+        return new SkyWarsArenaMeta;
+    }
+
+    public function createInstance(Arena $arena): ?SkyWarsMinigameInstance
+    {
+        return new SkyWarsMinigameInstance($arena);
     }
 }

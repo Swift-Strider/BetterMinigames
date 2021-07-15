@@ -22,6 +22,9 @@ declare(strict_types=1);
 
 namespace DiamondStrider1\BetterMinigames;
 
+use DiamondStrider1\BetterMinigames\data\YamlDataProvider;
+use DiamondStrider1\BetterMinigames\exceptions\CacheLoadException;
+use DiamondStrider1\BetterMinigames\types\DeserializationResult;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 
@@ -36,30 +39,40 @@ class BMG extends PluginBase
 
     /** @var ArenaCache $arenaCache */
     private $arenaCache;
-    /** @var Config $arenaConfig */
-    private $arenaConfig;
 
     public function onEnable()
     {
         self::$instance = $this;
+        $dFolder = $this->getDataFolder();
 
         CommandRegister::registerCommands($this);
         MinigameRegister::registerDefaultMinigames();
 
-        $this->arenaConfig = new Config($this->getDataFolder() . "arenas.yml");
-        $this->arenaCache = new ArenaCache;
-        $this->arenaCache->loadFromArray($this->arenaConfig->getAll());
+        $this->arenaCache = new ArenaCache(new YamlDataProvider($dFolder . "arenas.yml"));
+        $this->handleArenaCacheResult($this->arenaCache->load());
     }
 
     public function onDisable()
     {
-        $cacheData = $this->arenaCache->saveToArray();
-        $this->arenaConfig->setAll($cacheData);
-        $this->arenaConfig->save();
+        $this->arenaCache->save();
     }
 
     public function getArenaCache(): ?ArenaCache
     {
         return $this->arenaCache;
+    }
+
+    public function handleArenaCacheResult(DeserializationResult $result)
+    {
+        if ($result->hasErrors()) {
+            $this->getLogger()->emergency("Your arenas.yml file has ERRORS");
+            foreach ($result->getErrors() as $e)
+                $this->getLogger()->emergency($e);
+        }
+        if ($result->hasWarnings()) {
+            $this->getLogger()->emergency("Your arenas.yml file has WARNINGS");
+            foreach ($result->getWarnings() as $e)
+                $this->getLogger()->emergency($e);
+        }
     }
 }
