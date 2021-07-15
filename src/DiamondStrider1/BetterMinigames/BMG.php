@@ -23,10 +23,8 @@ declare(strict_types=1);
 namespace DiamondStrider1\BetterMinigames;
 
 use DiamondStrider1\BetterMinigames\data\YamlDataProvider;
-use DiamondStrider1\BetterMinigames\exceptions\CacheLoadException;
 use DiamondStrider1\BetterMinigames\types\DeserializationResult;
 use pocketmine\plugin\PluginBase;
-use pocketmine\utils\Config;
 
 class BMG extends PluginBase
 {

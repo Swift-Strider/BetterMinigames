@@ -23,7 +23,6 @@ declare(strict_types=1);
 namespace DiamondStrider1\BetterMinigames;
 
 use DiamondStrider1\BetterMinigames\commands\admin\AdminCommand;
-use DiamondStrider1\BetterMinigames\commands\BMGCommand;
 use pocketmine\command\CommandExecutor;
 use pocketmine\command\PluginCommand;
 
@@ -31,7 +30,7 @@ class CommandRegister
 {
     public static function registerCommands(BMG $plugin)
     {
-        self::registerCommandExecutor("bmg", new AdminCommand($plugin), $plugin);
+        self::registerCommandExecutor("bmg", new AdminCommand, $plugin);
     }
 
     private static function registerCommandExecutor(string $command, CommandExecutor $executor, BMG $plugin)

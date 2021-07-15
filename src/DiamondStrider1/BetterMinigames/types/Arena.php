@@ -22,8 +22,6 @@ declare(strict_types=1);
 
 namespace DiamondStrider1\BetterMinigames\types;
 
-use DiamondStrider1\BetterMinigames\exceptions\InvalidMetaType;
-use DiamondStrider1\BetterMinigames\exceptions\UnregisteredMetaException;
 use DiamondStrider1\BetterMinigames\utils\Utils;
 
 class Arena

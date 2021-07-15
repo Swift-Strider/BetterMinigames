@@ -23,9 +23,7 @@ declare(strict_types=1);
 namespace DiamondStrider1\BetterMinigames\minigames\skywars;
 
 use DiamondStrider1\BetterMinigames\types\Arena;
-use DiamondStrider1\BetterMinigames\types\ArenaMeta;
 use DiamondStrider1\BetterMinigames\types\Minigame;
-use DiamondStrider1\BetterMinigames\types\MinigameMeta;
 
 class SkyWars implements Minigame
 {
