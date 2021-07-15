@@ -50,7 +50,7 @@ class GameCache
         return isset($this->games[$id]) ? $this->games[$id] : null;
     }
 
-    /** @return string[] */
+    /** @return Game[] */
     public function getAllGames(): array
     {
         return $this->games;
