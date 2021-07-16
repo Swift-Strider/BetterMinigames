@@ -8,10 +8,10 @@ You can make several customizable minigames for your pocketmine server that is a
 
 ## 📖 Terminology for BetterMinigames
 
--   **Minigame:** A base minigame type that arenas build upon. Not to be confused with arenas, which are built by admins, these are predefined types made in code. _(ex. SkyWars, Bedwars, or Duels)_
--   **Arena:** Holds a reference to a level as well as extra metadata for the minigame it's assigned to. _(ex. An arena for bedwars would keep track of it's map, and it may have metadata defined that doubles the resources dropped)_
--   **Meta (or `ArenaMeta`):** Data that's specific to a Minigame. Customizable options will vary between different Minigame types.
--   **Game (WIP):** Used in the `/play` command (WIP as well). This holds multiple arenas, and will refer to them as maps. (Eg. One game to hold solo skywars maps another for doubles)
+-   **ArenaType:** A base minigame type that arenas build upon. Not to be confused with arenas, which are built by admins. These are predefined types made in code. _(ex. SkyWars, Bedwars, or Duels)_
+-   **Arena:** Holds a reference to a level as well as extra metadata for the ArenaType it's assigned to. _(ex. An arena for bedwars would keep track of it's map, and it may have metadata defined that doubles the resources dropped)_
+-   **ArenaMeta:** Data that's specific to an ArenaType. Customizable options will vary between different ArenaTypes.
+-   **Game (WIP):** Used in the `/play` command (WIP as well). This holds multiple arenas, and will showcase them to players as "maps." (Example use case: One game to hold solo skywars maps another for doubles)
 -   **MinigameInstance:** A running instance of an arena. These could be spawned via `/play` (WIP), or through `/duel` (WIP again).
 
 ## ❓ How to Use
