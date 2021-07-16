@@ -45,9 +45,14 @@ class ArenaCache
         return $this->arenas[$id] = new Arena($id);
     }
 
-    public function getArena(string $name): ?Arena
+    public function removeArena(string $id): void
     {
-        return isset($this->arenas[$name]) ? $this->arenas[$name] : null;
+        unset($this->arenas[$id]);
+    }
+
+    public function getArena(string $id): ?Arena
+    {
+        return isset($this->arenas[$id]) ? $this->arenas[$id] : null;
     }
 
     /** @return Arena[] */

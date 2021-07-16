@@ -23,7 +23,9 @@ declare(strict_types=1);
 namespace DiamondStrider1\BetterMinigames;
 
 use DiamondStrider1\BetterMinigames\data\YamlDataProvider;
+use DiamondStrider1\BetterMinigames\types\Arena;
 use DiamondStrider1\BetterMinigames\types\DeserializationResult;
+use DiamondStrider1\BetterMinigames\types\Game;
 use pocketmine\plugin\PluginBase;
 
 class BMG extends PluginBase
@@ -53,16 +55,6 @@ class BMG extends PluginBase
         $this->gameCache->save();
     }
 
-    public function getArenaCache(): ?ArenaCache
-    {
-        return $this->arenaCache;
-    }
-
-    public function getGameCache(): ?GameCache
-    {
-        return $this->gameCache;
-    }
-
     public function handleCacheResult(DeserializationResult $result, string $fileName)
     {
         if ($result->hasErrors()) {
@@ -76,6 +68,66 @@ class BMG extends PluginBase
                 $this->getLogger()->emergency($e);
         }
     }
+
+    //
+    // API
+    //
+
+    public function createArena(string $id): Arena
+    {
+        return $this->arenaCache->createArena($id);
+    }
+
+    public function removeArena(string $id): void
+    {
+        foreach ($this->gameCache->getAllGames() as $game) {
+            $game->removeArena($id);
+        }
+        $this->arenaCache->removeArena($id);
+    }
+
+    public function getArena(string $name): ?Arena
+    {
+        return $this->arenaCache->getArena($name);
+    }
+
+    /** @return Arena[] */
+    public function getAllArenas(): array
+    {
+        return $this->arenaCache->getAllArenas();
+    }
+
+    public function reloadArenas(): DeserializationResult
+    {
+        return $this->arenaCache->load(true);
+    }
+
+    public function createGame(string $id): Game
+    {
+        return $this->gameCache->createGame($id);
+    }
+
+    public function removeGame(string $id): void
+    {
+        $this->gameCache->removeGame($id);
+    }
+
+    public function getGame(string $name): ?Game
+    {
+        return $this->gameCache->getGame($name);
+    }
+
+    /** @return Game[] */
+    public function getAllGames(): array
+    {
+        return $this->gameCache->getAllGames();
+    }
+
+    public function reloadGames(): DeserializationResult
+    {
+        return $this->gameCache->load(true);
+    }
+
 
     /** @var BMG $instance */
     private static $instance;

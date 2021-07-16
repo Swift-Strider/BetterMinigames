@@ -28,11 +28,8 @@ class Game
 {
     /** @var string $id */
     private $id;
-    /** @var string $name */
-    private $name;
-    /** @var string[] $arenas
-     * $mapName => $arenaID
-     */
+    /** @var string[] $maps
+     * $mapName => $arenaID */
     private $maps;
 
     public function __construct(string $id)
@@ -54,6 +51,15 @@ class Game
     {
         if (isset($this->maps[$mapName])) {
             unset($this->maps[$mapName]);
+        }
+    }
+
+    public function removeArena(string $id): void
+    {
+        foreach ($this->maps as $mapName => $arenaID) {
+            if ($arenaID === $id) {
+                unset($this->maps[$mapName]);
+            }
         }
     }
 

@@ -45,6 +45,11 @@ class GameCache
         return $this->games[$id] = new Game($id);
     }
 
+    public function removeGame(string $id): void
+    {
+        unset($this->games[$id]);
+    }
+
     public function getGame(string $id): ?Game
     {
         return isset($this->games[$id]) ? $this->games[$id] : null;

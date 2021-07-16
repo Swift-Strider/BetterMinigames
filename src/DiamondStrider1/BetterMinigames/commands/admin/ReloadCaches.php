@@ -38,10 +38,10 @@ class ReloadCaches implements Subcommand
         $start = microtime(true);
 
         Utils::sendMessage($sender, "Reloading Arena Caches from Config");
-        $this->handleCacheResult($sender, BMG::getInstance()->getArenaCache()->load(true), "arenas.yml");
+        $this->handleCacheResult($sender, BMG::getInstance()->reloadArenas(), "arenas.yml");
 
         Utils::sendMessage($sender, "Reloading Game Caches from Config");
-        $this->handleCacheResult($sender, BMG::getInstance()->getGameCache()->load(true), "games.yml");
+        $this->handleCacheResult($sender, BMG::getInstance()->reloadGames(), "games.yml");
 
         $diff = microtime(true) - $start;
         Utils::sendMessage($sender, sprintf("Reloaded BetterMinigames Plugin in %.2f seconds", $diff));
