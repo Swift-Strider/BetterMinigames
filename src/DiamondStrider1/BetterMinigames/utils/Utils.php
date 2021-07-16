@@ -23,7 +23,7 @@ declare(strict_types=1);
 namespace DiamondStrider1\BetterMinigames\utils;
 
 use DiamondStrider1\BetterMinigames\BMG;
-use DiamondStrider1\BetterMinigames\MinigameRegister;
+use DiamondStrider1\BetterMinigames\ArenaTypeRegister;
 use DiamondStrider1\BetterMinigames\types\ArenaMeta;
 use DiamondStrider1\BetterMinigames\types\DeserializationResult;
 use ErrorException;
@@ -58,16 +58,16 @@ class Utils
 
     public static function constructArenaMeta(string $type, array $data, DeserializationResult &$result = null): ?ArenaMeta
     {
-        $mg = MinigameRegister::getMinigame($type);
+        $arenaType = ArenaTypeRegister::getArenaType($type);
 
-        if (!$mg) {
+        if (!$arenaType) {
             if ($result) {
-                $result->addError("Unregistered Minigame Type");
+                $result->addError("Unregistered ArenaType: " . $type);
             }
             return null;
         };
 
-        $meta = $mg->getArenaMeta();
+        $meta = $arenaType->getArenaMeta();
         try {
             $meta->loadFromArray($data);
         } catch (ErrorException $e) {
