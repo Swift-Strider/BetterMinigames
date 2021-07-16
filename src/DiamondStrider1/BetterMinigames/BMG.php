@@ -80,7 +80,7 @@ class BMG extends PluginBase
 
     public function sendChatCacheAlert(string $message)
     {
-        if (!$this->getConfig()->get("send_chat_errors")) return false;
+        if (!$this->getConfig()->get("send_chat_alerts")) return false;
         $message = self::PREFIX . TF::RED . $message;
         $pm = PermissionManager::getInstance();
         $perm = $pm->getPermission("better-minigames.alert");

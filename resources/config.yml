@@ -1,4 +1,4 @@
 # Whether to alert admins in game when a config has mistakes.
 # To filter which admins gets notified add the `better-minigames.alert`
 # permission on everyone you want to be notified.
-send_chat_errors: true
+send_chat_alerts: true
