@@ -32,6 +32,9 @@ class ArenaCache
     /** @var Arena[] $arenas */
     private $arenas = [];
 
+    /** @var array $invalidEntries */
+    private $invalidEntries = [];
+
     /** @var IDataProvider $config */
     private $config;
 
@@ -93,6 +96,11 @@ class ArenaCache
         $ret = new DeserializationResult;
         $this->arenas = [];
         foreach ($entries as $id => $arenaData) {
+            if (!is_array($arenaData)) {
+                $ret->addError("$id: " . TF::YELLOW . "ArenaData was not an array");
+                $this->invalidEntries[$id] = $arenaData;
+                continue;
+            }
             $arena = new Arena($id);
             $result = $arena->loadFromArray($arenaData);
             $ret->addResult(
@@ -102,7 +110,7 @@ class ArenaCache
                 TF::RESET . ", " . TF::YELLOW
             );
             if ($result->hasErrors()) {
-                // TODO: store invalid entries in array form, so admins can fix errors after shutting down the server
+                $this->invalidEntries[$id] = $arenaData;
                 continue;
             }
             $this->arenas[$id] = $arena;
@@ -112,7 +120,7 @@ class ArenaCache
 
     private function saveToArray(): array
     {
-        $data = [];
+        $data = $this->invalidEntries;
         foreach ($this->arenas as $id => $entry) {
             $data[$id] = $entry->saveToArray();
         }

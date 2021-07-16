@@ -77,15 +77,17 @@ class ReloadCaches implements Subcommand
     {
         if ($sender instanceof Player) {
             if ($result->hasErrors()) {
+                $count = count($result->getErrors());
                 Utils::sendMessage(
                     $sender,
-                    TF::RED . "The file $fileName has ERRORS; Check the console for more info."
+                    TF::RED . "The file $fileName has $count ERRORS; Check the console for more info."
                 );
             }
             if ($result->hasWarnings()) {
+                $count = count($result->getWarnings());
                 Utils::sendMessage(
                     $sender,
-                    TF::RED . "The file $fileName has WARNINGS; Check the console for more info."
+                    TF::RED . "The file $fileName has $count WARNINGS; Check the console for more info."
                 );
             }
         }

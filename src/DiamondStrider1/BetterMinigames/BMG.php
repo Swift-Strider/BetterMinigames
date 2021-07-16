@@ -67,12 +67,14 @@ class BMG extends PluginBase
         if ($result->hasErrors()) {
             $this->sendChatCacheAlert("The config file $fileName had ERRORS! Look at console for more info");
             $this->getLogger()->emergency("Your $fileName file has ERRORS");
+            $this->getLogger()->emergency(str_repeat("-", 10));
             foreach ($result->getErrors() as $e)
                 $this->getLogger()->emergency($e);
         }
         if ($result->hasWarnings()) {
             $this->sendChatCacheAlert("The config file $fileName had WARNINGS! Look at console for more info");
             $this->getLogger()->emergency("Your $fileName file has WARNINGS");
+            $this->getLogger()->emergency(str_repeat("-", 10));
             foreach ($result->getWarnings() as $e)
                 $this->getLogger()->emergency($e);
         }

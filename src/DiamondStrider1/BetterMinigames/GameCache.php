@@ -32,6 +32,9 @@ class GameCache
     /** @var Game[] $games */
     private $games = [];
 
+    /** @var array[] $invalidEntries */
+    private $invalidEntries = [];
+
     /** @var IDataProvider $config */
     private $config;
 
@@ -93,6 +96,11 @@ class GameCache
         $ret = new DeserializationResult;
         $this->games = [];
         foreach ($entries as $id => $gameData) {
+            if (!is_array($gameData)) {
+                $ret->addError("$id: " . TF::YELLOW . "GameData was not an array");
+                $this->invalidEntries[$id] = $gameData;
+                continue;
+            }
             $game = new Game($id);
             $result = $game->loadFromArray($gameData);
             $ret->addResult(
@@ -102,7 +110,7 @@ class GameCache
                 TF::RESET . ", " . TF::YELLOW
             );
             if ($result->hasErrors()) {
-                // TODO: store invalid entries in array form, so admins can fix errors after shutting down the server
+                $this->invalidEntries[$id] = $gameData;
                 continue;
             }
             $this->games[$id] = $game;
@@ -112,7 +120,7 @@ class GameCache
 
     private function saveToArray(): array
     {
-        $data = [];
+        $data = $this->invalidEntries;
         foreach ($this->games as $id => $entry) {
             $data[$id] = $entry->saveToArray();
         }

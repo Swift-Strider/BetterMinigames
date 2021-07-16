@@ -27,6 +27,7 @@ use DiamondStrider1\BetterMinigames\ArenaTypeRegister;
 use DiamondStrider1\BetterMinigames\types\ArenaMeta;
 use DiamondStrider1\BetterMinigames\types\DeserializationResult;
 use ErrorException;
+use Exception;
 use pocketmine\command\CommandSender;
 use ReflectionClass;
 use ReflectionProperty;
@@ -70,7 +71,7 @@ class Utils
         $meta = $arenaType->getArenaMeta();
         try {
             $meta->loadFromArray($data);
-        } catch (ErrorException $e) {
+        } catch (Exception $e) {
             $result->addError("Error Loading Meta: " . $e->getMessage());
         }
 

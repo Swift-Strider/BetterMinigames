@@ -58,10 +58,12 @@ class Arena
         try {
             $this->levelname = $data["levelname"];
             $this->registeredType = $data["registered_type"];
-            if ($this->registeredType !== "none")
+            if (is_array($data["meta"]))
                 $this->meta = Utils::constructArenaMeta($this->registeredType, $data["meta"], $ret);
+            else
+                $ret->addError("Malformed ArenaData: Meta must be an array");
         } catch (ErrorException $e) {
-            $ret->addError("Error Loading Arena: " . $e->getMessage());
+            $ret->addError("Malformed ArenaData: " . $e->getMessage());
         }
 
         return $ret;
