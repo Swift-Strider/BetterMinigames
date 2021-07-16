@@ -22,12 +22,12 @@ declare(strict_types=1);
 
 namespace DiamondStrider1\BetterMinigames\utils;
 
+use DiamondStrider1\BetterMinigames\BMG;
 use DiamondStrider1\BetterMinigames\MinigameRegister;
 use DiamondStrider1\BetterMinigames\types\ArenaMeta;
 use DiamondStrider1\BetterMinigames\types\DeserializationResult;
 use ErrorException;
 use pocketmine\command\CommandSender;
-use pocketmine\utils\TextFormat as TF;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -79,6 +79,6 @@ class Utils
 
     public static function sendMessage(CommandSender $sender, string $message)
     {
-        $sender->sendMessage(TF::GREEN . "[BMG] " . $message);
+        $sender->sendMessage(BMG::PREFIX . $message);
     }
 }

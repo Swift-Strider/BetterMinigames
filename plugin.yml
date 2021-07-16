@@ -13,6 +13,9 @@ commands:
         usage: /bmg ...
         permission: better-minigames.manage
 permissions:
+    better-minigames.alert:
+        description: Alerts players with this permission when the config has errors or warnings
+        default: op
     better-minigames.manage:
         description: Allows adding, removing, and customizing minigames on the server.
         default: op

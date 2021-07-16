@@ -27,6 +27,7 @@ use DiamondStrider1\BetterMinigames\commands\Subcommand;
 use DiamondStrider1\BetterMinigames\types\DeserializationResult;
 use DiamondStrider1\BetterMinigames\utils\Utils;
 use pocketmine\command\CommandSender;
+use pocketmine\permission\PermissionManager;
 use pocketmine\utils\TextFormat as TF;
 
 class ReloadCaches implements Subcommand
@@ -34,17 +35,32 @@ class ReloadCaches implements Subcommand
     public function execute(CommandSender $sender, array $args): bool
     {
         $plugin = BMG::getInstance();
-        $plugin->getLogger()->info(TF::YELLOW . $sender->getName() . " is reloading BetterMinigames");
+        $plugin->getLogger()->notice(TF::YELLOW . $sender->getName() . " is reloading BetterMinigames");
         $start = microtime(true);
 
-        Utils::sendMessage($sender, "Reloading Arena Caches from Config");
+        $getsAlerts = false;
+        if ($sender->hasPermission("better-minigames.alert")) {
+            $getsAlerts = true;
+            // Temporarily stops the sender from getting alerts.
+            // This only applies for when $sender is a player.
+            PermissionManager::getInstance()
+                ->unsubscribeFromPermission("better-minigames.alert", $sender);
+        }
+
+        Utils::sendMessage($sender, TF::YELLOW . "Reloading Arena Caches from Config");
         $this->handleCacheResult($sender, BMG::getInstance()->reloadArenas(), "arenas.yml");
 
-        Utils::sendMessage($sender, "Reloading Game Caches from Config");
+        Utils::sendMessage($sender, TF::YELLOW . "Reloading Game Caches from Config");
         $this->handleCacheResult($sender, BMG::getInstance()->reloadGames(), "games.yml");
 
         $diff = microtime(true) - $start;
         Utils::sendMessage($sender, sprintf("Reloaded BetterMinigames Plugin in %.2f seconds", $diff));
+
+        if ($getsAlerts) {
+            // Gives the player the ability to see alerts if they were able to before.
+            PermissionManager::getInstance()
+                ->subscribeToPermission("better-minigames.alert", $sender);
+        }
 
         return true;
     }

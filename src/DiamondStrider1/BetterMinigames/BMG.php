@@ -23,13 +23,17 @@ declare(strict_types=1);
 namespace DiamondStrider1\BetterMinigames;
 
 use DiamondStrider1\BetterMinigames\data\YamlDataProvider;
+use DiamondStrider1\BetterMinigames\listeners\ChatPlayerJoinListener;
 use DiamondStrider1\BetterMinigames\types\Arena;
 use DiamondStrider1\BetterMinigames\types\DeserializationResult;
 use DiamondStrider1\BetterMinigames\types\Game;
+use pocketmine\permission\PermissionManager;
 use pocketmine\plugin\PluginBase;
+use pocketmine\utils\TextFormat as TF;
 
 class BMG extends PluginBase
 {
+    const PREFIX = TF::GREEN . "[BMG] ";
     /** @var ArenaCache $arenaCache */
     private $arenaCache;
     /** @var GameCache $gameCache */
@@ -58,15 +62,30 @@ class BMG extends PluginBase
     public function handleCacheResult(DeserializationResult $result, string $fileName)
     {
         if ($result->hasErrors()) {
+            $this->sendChatCacheAlert("The config file $fileName had ERRORS! Look at console for more info");
             $this->getLogger()->emergency("Your $fileName file has ERRORS");
             foreach ($result->getErrors() as $e)
                 $this->getLogger()->emergency($e);
         }
         if ($result->hasWarnings()) {
+            $this->sendChatCacheAlert("The config file $fileName had WARNINGS! Look at console for more info");
             $this->getLogger()->emergency("Your $fileName file has WARNINGS");
             foreach ($result->getWarnings() as $e)
                 $this->getLogger()->emergency($e);
         }
+    }
+
+    public function sendChatCacheAlert(string $message)
+    {
+        $message = self::PREFIX . TF::RED . $message;
+        if ($this->getConfig()->get("send_chat_errors"))
+            $pm = PermissionManager::getInstance();
+        $perm = $pm->getPermission("better-minigames.alert");
+
+        $this->getServer()->broadcast($message, $perm->getName());
+
+        $listener = new ChatPlayerJoinListener($message, $perm);
+        $this->getServer()->getPluginManager()->registerEvents($listener, $this);
     }
 
     //
