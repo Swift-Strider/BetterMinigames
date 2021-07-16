@@ -95,6 +95,7 @@ class GameCache
     {
         $ret = new DeserializationResult;
         $this->games = [];
+        $this->invalidEntries = [];
         foreach ($entries as $id => $gameData) {
             if (!is_array($gameData)) {
                 $ret->addError("$id: " . TF::YELLOW . "GameData was not an array");

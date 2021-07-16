@@ -95,6 +95,7 @@ class ArenaCache
     {
         $ret = new DeserializationResult;
         $this->arenas = [];
+        $this->invalidEntries = [];
         foreach ($entries as $id => $arenaData) {
             if (!is_array($arenaData)) {
                 $ret->addError("$id: " . TF::YELLOW . "ArenaData was not an array");

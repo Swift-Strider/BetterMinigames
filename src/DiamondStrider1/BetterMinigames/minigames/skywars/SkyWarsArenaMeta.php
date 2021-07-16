@@ -23,8 +23,8 @@ declare(strict_types=1);
 namespace DiamondStrider1\BetterMinigames\minigames\skywars;
 
 use DiamondStrider1\BetterMinigames\types\ArenaMeta;
-use DomainException;
 use pocketmine\math\Vector3;
+use UnexpectedValueException;
 
 class SkyWarsArenaMeta implements ArenaMeta
 {
@@ -45,7 +45,7 @@ class SkyWarsArenaMeta implements ArenaMeta
         $spawn_pos = $data["SPAWN_POS"];
         foreach ($spawn_pos as $num)
             if (!is_float($num) && !is_int($num))
-                throw new DomainException("SPAWN_POS should only contain numbers");
+                throw new UnexpectedValueException("SPAWN_POS should only contain numbers");
         $this->SPAWN_POS = new Vector3($spawn_pos[0], $spawn_pos[1], $spawn_pos[2]);
     }
 
