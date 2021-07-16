@@ -32,7 +32,7 @@ class GameCache
     /** @var Game[] $games */
     private $games = [];
 
-    /** @var array[] $invalidEntries */
+    /** @var array $invalidEntries */
     private $invalidEntries = [];
 
     /** @var IDataProvider $config */
