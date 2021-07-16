@@ -24,7 +24,6 @@ namespace DiamondStrider1\BetterMinigames\types;
 
 use DiamondStrider1\BetterMinigames\utils\Utils;
 use ErrorException;
-use OutOfBoundsException;
 
 class Arena
 {
