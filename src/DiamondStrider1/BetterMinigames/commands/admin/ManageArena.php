@@ -32,14 +32,14 @@ class ManageArena implements Subcommand
     public function execute(CommandSender $sender, array $args): bool
     {
         if (count($args) < 1) return false;
-        $cache = BMG::getInstance()->getArenaCache();
+        $plugin = BMG::getInstance();
         switch ($args[0]) {
             case "create":
                 break;
             case "remove":
                 break;
             case "list":
-                $arenas = $cache->getAllArenas();
+                $arenas = $plugin->getAllArenas();
                 $cArenas = count($arenas);
                 if ($cArenas == 1)
                     Utils::sendMessage($sender, "There is a single loaded arena:");

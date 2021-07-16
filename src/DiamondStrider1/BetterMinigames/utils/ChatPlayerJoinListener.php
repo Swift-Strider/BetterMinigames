@@ -34,7 +34,7 @@ class ChatPlayerJoinListener implements Listener
     private $message;
     /** @var Permission $perm */
     private $perm;
-    /** @var string[] $blacklist */
+    /** @var bool[] $blacklist */
     private $blacklist = [];
 
     public function __construct(string $message, Permission $perm)

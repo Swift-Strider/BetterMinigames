@@ -80,7 +80,6 @@ class Game
     {
         $data = [];
 
-        $data["name"] = $this->name;
         $data["maps"] = $this->maps;
 
         return $data;
