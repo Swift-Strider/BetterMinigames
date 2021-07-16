@@ -23,7 +23,7 @@ declare(strict_types=1);
 namespace DiamondStrider1\BetterMinigames\types;
 
 use DiamondStrider1\BetterMinigames\utils\Utils;
-use ErrorException;
+use Exception;
 
 class Arena
 {
@@ -62,7 +62,7 @@ class Arena
                 $this->meta = Utils::constructArenaMeta($this->registeredType, $data["meta"], $ret);
             else
                 $ret->addError("Malformed ArenaData: Meta must be an array");
-        } catch (ErrorException $e) {
+        } catch (Exception $e) {
             $ret->addError("Malformed ArenaData: " . $e->getMessage());
         }
 

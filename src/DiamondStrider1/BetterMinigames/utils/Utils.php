@@ -26,7 +26,6 @@ use DiamondStrider1\BetterMinigames\BMG;
 use DiamondStrider1\BetterMinigames\ArenaTypeRegister;
 use DiamondStrider1\BetterMinigames\types\ArenaMeta;
 use DiamondStrider1\BetterMinigames\types\DeserializationResult;
-use ErrorException;
 use Exception;
 use pocketmine\command\CommandSender;
 use ReflectionClass;

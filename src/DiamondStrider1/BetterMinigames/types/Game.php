@@ -22,7 +22,7 @@ declare(strict_types=1);
 
 namespace DiamondStrider1\BetterMinigames\types;
 
-use ErrorException;
+use Exception;
 
 class Game
 {
@@ -69,7 +69,7 @@ class Game
 
         try {
             $this->maps = $data["maps"];
-        } catch (ErrorException $e) {
+        } catch (Exception $e) {
             $ret->addError($e->getMessage());
         }
 
