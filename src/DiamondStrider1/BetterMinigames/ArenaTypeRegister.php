@@ -23,31 +23,31 @@ declare(strict_types=1);
 namespace DiamondStrider1\BetterMinigames;
 
 use DiamondStrider1\BetterMinigames\minigames\skywars\SkyWars;
-use DiamondStrider1\BetterMinigames\types\Minigame;
+use DiamondStrider1\BetterMinigames\types\ArenaType;
 
-class MinigameRegister
+class ArenaTypeRegister
 {
-    /** @var Minigame[] $minigames */
+    /** @var ArenaType[] $minigames */
     private static $minigames = [];
 
-    public static function registerDefaultMinigames()
+    public static function registerDefaultArenaTypes()
     {
-        self::registerMinigame("SkyWars", new SkyWars);
+        self::registerArenaType("SkyWars", new SkyWars);
     }
 
-    public static function registerMinigame(string $uniqueName, Minigame $minigame): void
+    public static function registerArenaType(string $uniqueName, ArenaType $minigame): void
     {
         self::$minigames[$uniqueName] = $minigame;
     }
 
-    /** @return Minigame[] */
-    public static function getAllMinigames(): array
+    /** @return ArenaType[] */
+    public static function getAllArenaTypes(): array
     {
         return self::$minigames;
     }
 
-    /** @return Minigame */
-    public static function getMinigame(string $name): ?Minigame
+    /** @return ArenaType */
+    public static function getArenaType(string $name): ?ArenaType
     {
         if (!isset(self::$minigames[$name])) {
             return null;

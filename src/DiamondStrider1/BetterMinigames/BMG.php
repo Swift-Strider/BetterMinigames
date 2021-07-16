@@ -48,7 +48,7 @@ class BMG extends PluginBase
         $this->reloadConfig();
 
         CommandRegister::registerCommands($this);
-        MinigameRegister::registerDefaultMinigames();
+        ArenaTypeRegister::registerDefaultArenaTypes();
 
         $this->arenaCache = new ArenaCache(new YamlDataProvider($dFolder . "arenas.yml"));
         $this->handleCacheResult($this->arenaCache->load(), "arenas.yml");

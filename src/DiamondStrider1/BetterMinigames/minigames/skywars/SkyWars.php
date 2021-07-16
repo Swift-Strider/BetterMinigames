@@ -24,10 +24,10 @@ namespace DiamondStrider1\BetterMinigames\minigames\skywars;
 
 use DiamondStrider1\BetterMinigames\types\Arena;
 use DiamondStrider1\BetterMinigames\types\ArenaMeta;
-use DiamondStrider1\BetterMinigames\types\Minigame;
+use DiamondStrider1\BetterMinigames\types\ArenaType;
 use DiamondStrider1\BetterMinigames\types\MinigameInstance;
 
-class SkyWars implements Minigame
+class SkyWars implements ArenaType
 {
     public function getArenaMeta(): ArenaMeta
     {

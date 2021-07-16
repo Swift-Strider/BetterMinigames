@@ -22,7 +22,7 @@ declare(strict_types=1);
 
 namespace DiamondStrider1\BetterMinigames\types;
 
-interface Minigame
+interface ArenaType
 {
     public function getArenaMeta(): ArenaMeta;
     public function createInstance(Arena $arena): ?MinigameInstance;
