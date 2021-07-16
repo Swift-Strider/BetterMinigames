@@ -28,6 +28,7 @@ use DiamondStrider1\BetterMinigames\types\DeserializationResult;
 use DiamondStrider1\BetterMinigames\utils\Utils;
 use pocketmine\command\CommandSender;
 use pocketmine\permission\PermissionManager;
+use pocketmine\Player;
 use pocketmine\utils\TextFormat as TF;
 
 class ReloadCaches implements Subcommand
@@ -74,17 +75,19 @@ class ReloadCaches implements Subcommand
 
     private function handleCacheResult(CommandSender $sender, DeserializationResult $result, string $fileName)
     {
-        if ($result->hasErrors()) {
-            Utils::sendMessage(
-                $sender,
-                TF::RED . "The file $fileName has ERRORS; Check the console for more info."
-            );
-        }
-        if ($result->hasWarnings()) {
-            Utils::sendMessage(
-                $sender,
-                TF::RED . "The file $fileName has WARNINGS; Check the console for more info."
-            );
+        if ($sender instanceof Player) {
+            if ($result->hasErrors()) {
+                Utils::sendMessage(
+                    $sender,
+                    TF::RED . "The file $fileName has ERRORS; Check the console for more info."
+                );
+            }
+            if ($result->hasWarnings()) {
+                Utils::sendMessage(
+                    $sender,
+                    TF::RED . "The file $fileName has WARNINGS; Check the console for more info."
+                );
+            }
         }
         BMG::getInstance()->handleCacheResult($result, $fileName);
     }
