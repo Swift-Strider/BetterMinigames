@@ -2,9 +2,9 @@
 
 _A plugin for Pocketmine which adds support for various minigames._
 
-## 🎮 Features
+## 🥇 Features
 
-You can make several customizable minigames for your pocketmine server that is accessible through commands, forms, and both. You may choose to make temporary levels for when ever a game starts or have in lobby arenas that stay in the world they were built in.
+You can make several customizable minigames for your pocketmine server that is accessible through commands, forms, and both. You may choose to make a new temporary world, so that players playing different instances of an arena are separate from each other, or build lobbies with arenas that allow spectators to watch from behind and join via command.
 
 ## 📖 Terminology for BetterMinigames
 
