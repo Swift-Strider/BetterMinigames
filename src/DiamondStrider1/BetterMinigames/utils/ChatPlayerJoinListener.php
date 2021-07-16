@@ -20,7 +20,7 @@
 
 declare(strict_types=1);
 
-namespace DiamondStrider1\BetterMinigames\listeners;
+namespace DiamondStrider1\BetterMinigames\utils;
 
 use DiamondStrider1\BetterMinigames\BMG;
 use pocketmine\event\Listener;

@@ -23,7 +23,7 @@ declare(strict_types=1);
 namespace DiamondStrider1\BetterMinigames;
 
 use DiamondStrider1\BetterMinigames\data\YamlDataProvider;
-use DiamondStrider1\BetterMinigames\listeners\ChatPlayerJoinListener;
+use DiamondStrider1\BetterMinigames\utils\ChatPlayerJoinListener;
 use DiamondStrider1\BetterMinigames\types\Arena;
 use DiamondStrider1\BetterMinigames\types\DeserializationResult;
 use DiamondStrider1\BetterMinigames\types\Game;
@@ -43,6 +43,9 @@ class BMG extends PluginBase
     {
         self::$instance = $this;
         $dFolder = $this->getDataFolder();
+
+        // This ensures that config.yml always appears even when `$this->getPlugin()` isn't called
+        $this->reloadConfig();
 
         CommandRegister::registerCommands($this);
         MinigameRegister::registerDefaultMinigames();
