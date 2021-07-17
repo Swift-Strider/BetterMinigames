@@ -22,8 +22,10 @@ declare(strict_types=1);
 
 namespace DiamondStrider1\BetterMinigames\types;
 
+use pocketmine\level\Level;
+
 interface ArenaType
 {
     public function getArenaMeta(): ArenaMeta;
-    public function createInstance(Arena $arena): ?MinigameInstance;
+    public function createInstance(Level $level, ArenaMeta $meta): ?MinigameInstance;
 }

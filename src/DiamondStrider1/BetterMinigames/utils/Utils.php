@@ -28,6 +28,7 @@ use DiamondStrider1\BetterMinigames\types\ArenaMeta;
 use DiamondStrider1\BetterMinigames\types\DeserializationResult;
 use Exception;
 use pocketmine\command\CommandSender;
+use pocketmine\Server;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -80,5 +81,34 @@ class Utils
     public static function sendMessage(CommandSender $sender, string $message)
     {
         $sender->sendMessage(BMG::PREFIX . $message);
+    }
+
+    public static function makeTempLevel(string $levelname, string $prefix): string
+    {
+        $levelsFolder = Server::getInstance()->getDataPath() . "worlds/";
+        $srcFolder = $levelsFolder . $levelname;
+        $destFolder = $levelsFolder . $prefix . "-" . bin2hex(random_bytes(4)) . "-temp";
+
+        self::copy_files($srcFolder, $destFolder);
+        return $destFolder;
+    }
+
+    private static function copy_files(string $src, string $dest)
+    {
+        if (is_file($dest)) unlink($dest);
+        if (!is_dir($dest)) mkdir($dest);
+        if ($handle = opendir($src)) {
+            while (($file = readdir($handle)) !== false) {
+                if (!empty(array_intersect([".", ".."], [$file]))) continue;
+                $srcFile = $src . "/" . $file;
+                $destFile = $dest . "/" . $file;
+                if (is_dir($srcFile)) {
+                    self::copy_files($srcFile, $destFile);
+                    continue;
+                }
+                copy($srcFile, $destFile);
+            }
+            closedir($handle);
+        }
     }
 }

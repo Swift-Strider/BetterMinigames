@@ -22,10 +22,10 @@ declare(strict_types=1);
 
 namespace DiamondStrider1\BetterMinigames\minigames\skywars;
 
-use DiamondStrider1\BetterMinigames\types\Arena;
 use DiamondStrider1\BetterMinigames\types\ArenaMeta;
 use DiamondStrider1\BetterMinigames\types\ArenaType;
 use DiamondStrider1\BetterMinigames\types\MinigameInstance;
+use pocketmine\level\Level;
 
 class SkyWars implements ArenaType
 {
@@ -34,8 +34,8 @@ class SkyWars implements ArenaType
         return new SkyWarsArenaMeta;
     }
 
-    public function createInstance(Arena $arena): ?MinigameInstance
+    public function createInstance(Level $level, ArenaMeta $meta): ?MinigameInstance
     {
-        return new SkyWarsMinigameInstance($arena);
+        return new SkyWarsMinigameInstance($level, $meta);
     }
 }

@@ -22,21 +22,24 @@ declare(strict_types=1);
 
 namespace DiamondStrider1\BetterMinigames\minigames\skywars;
 
-use DiamondStrider1\BetterMinigames\types\Arena;
 use DiamondStrider1\BetterMinigames\types\MinigameInstance;
+use pocketmine\level\Level;
 use pocketmine\Player;
 
 class SkyWarsMinigameInstance implements MinigameInstance
 {
-    /** @var Arena $arena */
-    private $arena;
+    /** @var Level $level */
+    private $level;
+    /** @var Meta $meta */
+    private $meta;
     private $state = 0;
     private $players = [];
     private $spectators = [];
 
-    public function __construct(Arena $arena)
+    public function __construct(Level $level, SkyWarsArenaMeta $meta)
     {
-        $this->arena = $arena;
+        $this->level = $level;
+        $this->meta = $meta;
     }
 
     public function sendPlayer(Player $player): bool

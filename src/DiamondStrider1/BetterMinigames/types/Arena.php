@@ -22,8 +22,10 @@ declare(strict_types=1);
 
 namespace DiamondStrider1\BetterMinigames\types;
 
+use DiamondStrider1\BetterMinigames\ArenaTypeRegister;
 use DiamondStrider1\BetterMinigames\utils\Utils;
 use Exception;
+use pocketmine\Server;
 
 class Arena
 {
@@ -49,6 +51,22 @@ class Arena
     public function getType(): string
     {
         return $this->registeredType;
+    }
+
+    public function startGame(bool $copyLevel): ?MinigameInstance
+    {
+        $levelname = $this->levelname;
+        if ($copyLevel) {
+            $levelname = Utils::makeTempLevel($this->levelname, $this->id);
+        }
+        $level = Server::getInstance()->getLevelByName($levelname);
+        if (!$level) return null;
+
+        $arenaType = ArenaTypeRegister::getArenaType($this->registeredType);
+        if (!$arenaType) return null;
+
+        $inst = $arenaType->createInstance($level, $this->meta);
+        return $inst;
     }
 
     public function loadFromArray(array $data): DeserializationResult
